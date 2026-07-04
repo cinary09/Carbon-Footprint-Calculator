@@ -47,13 +47,20 @@ each was kept — see [Merge notes](#merge-notes) below.
 ## Project structure
 
 ```
-merged/
+Climate Action Tracker/
 ├── app.py                  # Routes and app logic
 ├── models.py                # Database access + schema + business rules
 ├── requirements.txt
 ├── database.db               # Created automatically on first run
 ├── static/
 │   └── style.css
+├── LICENCE
+├── README.md
+├──.gitignore                # Can be deleted no need
+├── Presentation/            #If you are not a student u can be delete or you can look at it
+|   ├── Presentation.pptx
+|   ├── Raw Images/
+|   |   ├── [images of each slide like (slide.11.jpg)]
 └── templates/
     ├── base.html             # Nav, flash messages, footer
     ├── index.html            # Public landing page
