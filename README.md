@@ -1,165 +1,255 @@
 # 🌍 Climate Action Tracker
 
-A Flask web app for logging everyday climate-positive actions, scoring
-them, and tracking your progress over time.
+![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
+![Flask](https://img.shields.io/badge/Flask-3.x-black.svg)
+![SQLite](https://img.shields.io/badge/Database-SQLite-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-This version is a **merge** of three independently built drafts of the
-same project (one built with ChatGPT, one with Claude, one with
-Gemini). Instead of picking a single draft, the strongest piece of
-each was kept — see [Merge notes](#merge-notes) below.
+A lightweight Flask web application that helps users record everyday climate-friendly actions, earn points, and monitor their environmental impact through an intuitive dashboard and detailed statistics.
 
----
-
-## Features
-
-- **Accounts** — register with username, email, and password; passwords
-  are hashed with Werkzeug's `generate_password_hash` / `check_password_hash`,
-  never stored in plain text.
-- **Activity logging** — add, edit, and delete climate actions (recycling,
-  cycling, public transport, planting trees, saving electricity/water),
-  each with a date and optional notes.
-- **Points system** — every activity type has a fixed point value; your
-  dashboard shows a running total.
-- **Statistics page** — total points, total activities, most common
-  action, average points per activity, a full per-activity breakdown
-  table, and progress bars.
-- **Flash messages** — clear feedback after every action (success,
-  error, warning), including a personalized welcome-back message on login.
-- **Zero JavaScript** — every interaction, including delete confirmation,
-  is handled server-side with Flask, Jinja2, and plain HTML forms. There
-  is a dedicated confirmation page for deletes instead of a JS `confirm()`
-  popup.
+Designed with simplicity, security, and accessibility in mind, the application is built using **Flask**, **Jinja2**, **Werkzeug**, and **SQLite**, with **zero JavaScript**.
 
 ---
 
-## Tech stack
+## ✨ Features
 
-| Layer      | Choice                                   |
-|------------|-------------------------------------------|
-| Backend    | Flask                                      |
-| Templating | Jinja2                                     |
-| Auth/security | Werkzeug (`werkzeug.security`)          |
-| Database   | SQLite (via the standard `sqlite3` module) |
-| Frontend   | HTML + CSS only — no JavaScript            |
+### 👤 User Accounts
+- Secure registration and login
+- Password hashing using Werkzeug
+- Session-based authentication
+
+### 🌱 Climate Activity Tracking
+- Add, edit, and delete activities
+- Record activity dates and optional notes
+- Multiple predefined climate-positive actions
+
+### 🏆 Point System
+- Automatic point calculation
+- Running total displayed on the dashboard
+- Consistent scoring across the application
+
+### 📊 Statistics Dashboard
+- Total points earned
+- Total activities completed
+- Most frequently logged activity
+- Average points per activity
+- Activity breakdown table
+- Visual progress bars
+
+### 💬 User Feedback
+- Flash messages for successful and failed actions
+- Personalized welcome message after login
+
+### 🚫 Zero JavaScript
+Every feature is implemented entirely with:
+
+- Flask
+- Jinja2
+- HTML
+- CSS
+
+Even delete confirmation is handled through a dedicated server-rendered confirmation page instead of JavaScript dialogs.
 
 ---
 
-## Project structure
+# 🛠 Tech Stack
 
-```
+| Component | Technology |
+|------------|------------|
+| Backend | Flask |
+| Templates | Jinja2 |
+| Authentication | Werkzeug Security |
+| Database | SQLite (`sqlite3`) |
+| Frontend | HTML5 + CSS3 |
+| JavaScript | None |
+
+---
+
+# 📁 Project Structure
+
+```text
 Climate Action Tracker/
-├── app.py                  # Routes and app logic
-├── models.py                # Database access + schema + business rules
+│
+├── app.py                     # Application routes
+├── models.py                  # Database logic & business rules
 ├── requirements.txt
-├── database.db               # Created automatically on first run
+├── database.db                # Auto-created on first launch
+│
 ├── static/
 │   └── style.css
-├── LICENCE
+│
+├── templates/
+│   ├── base.html
+│   ├── index.html
+│   ├── register.html
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── add_activity.html
+│   ├── edit_activity.html
+│   ├── confirm_delete.html
+│   └── statistics.html
+│
+├── Presentation/              # Optional presentation materials
+│   ├── Presentation.pptx
+│   └── Raw Images/
+│
+├── LICENSE
 ├── README.md
-├──.gitignore                # Can be deleted no need
-├── Presentation/            #If you are not a student u can be delete or you can look at it
-|   ├── Presentation.pptx
-|   ├── Raw Images/
-|   |   ├── [images of each slide like (slide.11.jpg)]
-└── templates/
-    ├── base.html             # Nav, flash messages, footer
-    ├── index.html            # Public landing page
-    ├── register.html
-    ├── login.html
-    ├── dashboard.html
-    ├── add_activity.html
-    ├── edit_activity.html
-    ├── confirm_delete.html   # No-JS delete confirmation
-    └── statistics.html
+└── .gitignore
 ```
 
 ---
 
-## Setup
+# 🚀 Getting Started
 
-1. **Create a virtual environment (recommended)**
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate      # Windows: venv\Scripts\activate
-   ```
+## 1. Clone the repository
 
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run the app**
-   ```bash
-   python app.py
-   ```
-   The database (`database.db`) and its tables are created automatically
-   the first time the app runs.
-
-4. Open **http://127.0.0.1:5000** in your browser.
-
-Optional: set a custom session secret key before running in anything
-beyond local development:
 ```bash
-export SECRET_KEY="your-own-random-secret"   # Windows: set SECRET_KEY=...
+git clone https://github.com/yourusername/climate-action-tracker.git
+
+cd climate-action-tracker
 ```
 
 ---
 
-## Routes
+## 2. Create a virtual environment
 
-| Method(s)   | Route                          | Description                          |
-|-------------|---------------------------------|---------------------------------------|
-| GET         | `/`                              | Landing page                          |
-| GET, POST   | `/register`                      | Create an account                     |
-| GET, POST   | `/login`                         | Log in                                |
-| GET         | `/logout`                        | Log out                               |
-| GET         | `/dashboard`                     | View your activity log + score        |
-| GET, POST   | `/activity/add`                  | Log a new activity                    |
-| GET, POST   | `/activity/edit/<id>`            | Edit an existing activity             |
-| GET         | `/activity/delete/<id>`          | Confirmation page before deleting     |
-| POST        | `/activity/delete/<id>`          | Actually delete the activity          |
-| GET         | `/statistics`                    | View totals, breakdown, progress bars |
+```bash
+python -m venv venv
+```
 
----
+Activate it:
 
-## Activity point values
+**Windows**
 
-| Activity                     | Points |
-|-------------------------------|--------|
-| ♻️ Recycled waste              | 5      |
-| 🚌 Used public transportation  | 4      |
-| 🚴 Rode a bicycle              | 4      |
-| 🌱 Planted a tree              | 10     |
-| 💡 Saved electricity           | 3      |
-| 💧 Saved water                 | 3      |
+```bash
+venv\Scripts\activate
+```
 
-Defined once in `models.py` (`ACTIVITY_POINTS`) so scoring logic and
-forms can never fall out of sync.
+**Linux / macOS**
+
+```bash
+source venv/bin/activate
+```
 
 ---
 
-## Merge notes
+## 3. Install dependencies
 
-This project combines three separately generated drafts:
-
-- **Architecture** (dataclasses, schema, query helpers, `login_required`
-  decorator) — taken from the cleanest of the three drafts as the base.
-- **Email field on registration + statistics page layout** (stat cards,
-  breakdown table, progress bars) — merged in from a second draft.
-- **Friendly, personalized flash messages and nav styling** — merged in
-  from a third draft.
-- **Delete confirmation** was rebuilt from scratch: all three original
-  drafts used a JavaScript `confirm()` popup, which was replaced with a
-  plain server-rendered confirmation page to keep the whole app free of
-  JavaScript.
+```bash
+pip install -r requirements.txt
+```
 
 ---
 
-## Notes on security
+## 4. Run the application
 
-- Passwords are hashed with Werkzeug before being stored — plain-text
-  passwords are never written to the database.
-- Every activity route checks that the activity actually belongs to the
-  logged-in user before allowing edits or deletes.
-- Delete uses a POST request (not a GET link), which is the correct way
-  to perform a state-changing action in HTTP.
+```bash
+python app.py
+```
+
+The SQLite database is automatically created during the first launch.
+
+Open your browser and visit:
+
+```
+http://127.0.0.1:5000
+```
+
+---
+
+## 🔐 Optional Environment Variable
+
+For production or deployment, set a custom secret key:
+
+**Linux / macOS**
+
+```bash
+export SECRET_KEY="your-random-secret"
+```
+
+**Windows**
+
+```cmd
+set SECRET_KEY=your-random-secret
+```
+
+---
+
+# 🌿 Activity Point Values
+
+| Activity | Points |
+|----------|-------:|
+| ♻️ Recycled Waste | 5 |
+| 🚌 Used Public Transportation | 4 |
+| 🚴 Rode a Bicycle | 4 |
+| 🌱 Planted a Tree | 10 |
+| 💡 Saved Electricity | 3 |
+| 💧 Saved Water | 3 |
+
+Point values are centrally defined in `models.py` to ensure consistency throughout the application.
+
+---
+
+# 📌 Application Routes
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/` | Home page |
+| GET, POST | `/register` | Register a new account |
+| GET, POST | `/login` | User login |
+| GET | `/logout` | Logout |
+| GET | `/dashboard` | Dashboard |
+| GET, POST | `/activity/add` | Add activity |
+| GET, POST | `/activity/edit/<id>` | Edit activity |
+| GET | `/activity/delete/<id>` | Delete confirmation |
+| POST | `/activity/delete/<id>` | Delete activity |
+| GET | `/statistics` | Statistics page |
+
+---
+
+# 🔒 Security
+
+The application follows several security best practices:
+
+- Passwords are hashed using Werkzeug.
+- Plain-text passwords are never stored.
+- User sessions are securely managed.
+- Users may only edit or delete their own activities.
+- Destructive actions use POST requests.
+- Authentication is enforced for protected routes.
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome!
+
+If you'd like to improve the project:
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Commit your changes.
+4. Open a Pull Request.
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+See the **LICENSE** file for additional information.
+
+---
+
+# 👨‍💻 Author
+
+Created by **cinary09**
+
+GitHub: https://github.com/cinary09
+
+---
+
+# ⭐ Support
+
+If you found this project useful, consider giving it a ⭐ on GitHub. It helps support future improvements and new projects.
